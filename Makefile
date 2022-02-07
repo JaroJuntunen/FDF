@@ -6,7 +6,7 @@
 #    By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/24 15:30:07 by jjuntune          #+#    #+#              #
-#    Updated: 2022/02/07 20:06:01 by jjuntune         ###   ########.fr        #
+#    Updated: 2022/02/07 22:28:03 by jjuntune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,5 +30,6 @@ clean:
 
 fclean: clean
 	make -C libft/ fclean
+	rm a.out
 
 re: fclean all
