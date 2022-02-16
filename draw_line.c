@@ -6,88 +6,160 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 16:31:51 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/07 22:22:08 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/02/16 21:32:11 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include <stdio.h>
 
-static void	draw_higher_z(void **mlx_win, int *x, int *z, float *relations)
-{
-	int i;
-
-	i = 0;
-	while (x[0] <= x[1] && z[0] <= z[1])
-	{
-		if (relations[0] == (float)1 && (x[0] <= x[1] ||z[0] <= z[1]))
-			mlx_pixel_put(mlx_win[0], mlx_win[1], x[0]++, z[0]++ ,COLOR);
-		else if (x[0] == x[1] && z[0] <= z[1])
-			mlx_pixel_put(mlx_win[0], mlx_win[1], x[0], z[0]++ ,COLOR);
-		else if (z[0] == z[1] && x[0] <= x[1])
-			mlx_pixel_put(mlx_win[0], mlx_win[1], x[0]++, z[0] ,COLOR);
-		else if (x[0] <= x[1] && z[0] <= z[1])
-		{
-			while ((i <= relations[0]) && (z[0] <= z[1]))
-			{
-				mlx_pixel_put(mlx_win[0], mlx_win[1], x[0], z[0]++ ,COLOR);
-				i++;
-			}
-			if (x[0] <= x[1])
-				mlx_pixel_put(mlx_win[0], mlx_win[1], x[0]++, z[0] ,COLOR);
-			relations[0] = (relations[0] + relations[1]);
-		}
-	}
-}
-
-static void	draw_higher_x(void **mlx_win, int *x, int *z, float *relations)
+static void	draw_nlv_z(t_list *st)
 {
 	int	i;
 
 	i = 0;
-	while (x[0] <= x[1] && z[0] <= z[1])
+	while (st->rel == (float)1 && (st->sx <= st->ex && st->sy >= st->ey))
+		((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx++] = st->color;
+	while (st->sx <= st->ex && st->sy >= st->ey)
 	{
-		if (relations[0] == (float)1 && (x[0] <= x[1] ||z[0] <= z[1]))
-			mlx_pixel_put(mlx_win[0], mlx_win[1], x[0]++, z[0]++ ,COLOR);
-		else if (x[0] == x[1] && z[0] <= z[1])
-			mlx_pixel_put(mlx_win[0], mlx_win[1], x[0], z[0]++ ,COLOR);
-		else if (z[0] == z[1] && x[0] <= x[1])
-			mlx_pixel_put(mlx_win[0], mlx_win[1], x[0]++, z[0] ,COLOR);
-		else if (x[0] <= x[1] && z[0] <= z[1])
+		if (st->sx == st->ex && st->sy >= st->ey)
+			((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx] = st->color;
+		else if (st->sy == st->ey && st->sx <= st->ex)
+			((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
+		else if (st->sx <= st->ex && st->sy >= st->ey)
 		{
-			while ((i <= relations[0]) && (x[0] <= x[1]))
+			while (((float)i <= st->rel) && (st->sy >= st->ey))
 			{
-				mlx_pixel_put(mlx_win[0], mlx_win[1], x[0]++, z[0] ,COLOR);
+				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+				((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx] = st->color;
 				i++;
 			}
-			if (z[0] < z[1])
-				mlx_pixel_put(mlx_win[0], mlx_win[1], x[0], z[0]++ ,COLOR);
-			relations[0] = (relations[0] + relations[1]);
+			if (st->sx <= st->ex)
+			{
+				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+				((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
+			}
+			st->rel += st->orig_rel;
 		}
 	}
+	printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
 }
 
-void	draw_line(void **mlx_win, int *x, int *z)
+static void	draw_higher_z(t_list *st)
 {
-	float	relations[2];
-	int		x_len;
-	int		z_len;
+	int	i;
 
-	x_len = (x[1] - x[0]);
-	if (x_len == 0)
-		x_len = 1;
-	z_len = (z[1] - z[0]);
-	if (z_len == 0)
-		z_len = 1;
-	if (x_len >= z_len)
+	i = 0;
+	while (st->rel == (float)1 && (st->sx <= st->ex && st->sy <= st->ey))
+		((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx++] = st->color;
+	while (st->sx <= st->ex && st->sy <= st->ey)
 	{
-		relations[0] = ((float)x_len / (float)z_len);
-		relations[1] = ((float)x_len / (float)z_len);
-		draw_higher_x(mlx_win, x, z, relations);
+		if (st->sx == st->ex && st->sy <= st->ey)
+			((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx] = st->color;
+		else if (st->sy == st->ey && st->sx <= st->ex)
+			((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
+		else if (st->sx <= st->ex && st->sy <= st->ey)
+		{
+			while (((float)i <= st->rel) && (st->sy <= st->ey))
+			{
+				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+				((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx] = st->color;
+				i++;
+			}
+			if (st->sx <= st->ex)
+			{
+				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+				((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
+			}
+			st->rel += st->orig_rel;
+		}
 	}
+	printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+}
+
+static void	draw_nlv_x(t_list *st)
+{
+	int	i;
+
+	i = 0;
+	while (st->rel == (float)1 && (st->sx <= st->ex && st->sy >= st->ey))
+			((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx++] = st->color;
+	while (st->sx <= st->ex && st->sy >= st->ey)
+	{
+		if (st->sx == st->ex && st->sy >= st->ey)
+			((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx] = st->color;
+		else if (st->sy == st->ey && st->sx <= st->ex)
+			((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
+		else if (st->sx <= st->ex && st->sy >= st->ey)
+		{
+			while (((float)i <= st->rel) && (st->sx <= st->ex))
+			{
+				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+				((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
+				i++;
+			}
+			if (st->sy >= st->ey)
+			{
+				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+				((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx] = st->color;
+			}
+		}
+			st->rel += st->orig_rel;
+	}
+	printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+}
+
+static void	draw_higher_x(t_list *st)
+{
+	int	i;
+	
+	i = 0;
+	while (st->rel == (float)1 && (st->sx <= st->ex && st->sy <= st->ey))
+			((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx++] = st->color;
+	while (st->sx <= st->ex && st->sy <= st->ey)
+	{
+		if (st->sx == st->ex && st->sy <= st->ey)
+			((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx] = st->color;
+		else if (st->sy == st->ey && st->sx <= st->ex)
+			((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
+		else if (st->sx <= st->ex && st->sy <= st->ey)
+		{
+			while (((float)i <= st->rel) && (st->sx <= st->ex))
+			{
+				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+				((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
+				i++;
+			}
+			if (st->sy <= st->ey)
+			{
+				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+				((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx] = st->color;
+			}
+			st->rel += st->orig_rel;
+		}
+	}
+	printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+}
+
+int	draw_line(t_list *head)
+{
+	int		x_len;
+	int		y_len;
+
+	x_len = (head->ex - head->sx);
+	y_len = (head->ey - head->sy);
+	if (x_len >= y_len && x_len >= 0 && y_len >= 0)
+		draw_higher_x(first_relation(x_len, y_len, head));
+	else if (y_len >= x_len && x_len >= 0 && y_len >= 0)
+		draw_higher_z(second_relation(x_len, y_len, head));
+	else if (x_len <= (y_len * -1) && x_len >= 0 && y_len <= 0)
+		draw_nlv_x(third_relation(x_len, y_len, head));
+	else if ((y_len * -1) <= x_len && x_len >= 0 && y_len <= 0)
+		draw_nlv_z(fourth_relation(x_len, y_len, head));
 	else
 	{
-		relations[0] = ((float)z_len / (float)x_len);
-		relations[1] = ((float)z_len / (float)x_len);
-		draw_higher_z(mlx_win, x, z, relations);
+		if (draw_line_extention(head) == -1)
+			return (-1);
 	}
+	return (0);
 }
