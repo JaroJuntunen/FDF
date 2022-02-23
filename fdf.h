@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:33:31 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/16 21:31:56 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/02/22 20:13:07 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # define BUFF_SIZE 8
 # define FD_MAX 8192
 
-# define WIN_WIDTH 1000
-# define WIN_HEIGHT 1000
+# define WIN_W 1000
+# define WIN_H 1000
 
 typedef struct s_list
 {
@@ -36,14 +36,29 @@ typedef struct s_list
 	int		ey;
 	
 	int		color;
-	int		win_w;
-	int		win_h;
+	int		color_on_off;
 	int		*image;
 	int		pixel_bits;
 	int		line_bytes;
 	int		endian;
 	int		pixel;
 	char	*buffer;
+
+	int		**coordinates;
+	
+	int		highest_y;
+	int		maplen;
+	int		maphight;
+	int		zoom;
+	int		woffset;
+	int		hoffset;
+	
+
+	int		h_rotation;
+	float	v_rotation;
+
+	char	**argv_copy;
+	
 }			t_list;
 
 # define ANGLE 6
@@ -54,14 +69,16 @@ typedef struct s_list
 
 
 
-int		**readcoordinates(char **argv);
+int		readcoordinates(char **argv, t_list *all);
 int		get_next_line(const int fd, char **line);
-int	draw_line(t_list *head);
-int	draw_line_extention(t_list *head);
-t_list	*first_relation(int x_len, int z_len, t_list *head);
-t_list	*second_relation(int x_len, int z_len, t_list *head);
-t_list	*third_relation(int x_len, int z_len, t_list *head);
-t_list	*fourth_relation(int x_len, int z_len, t_list *head);
+int		draw_line(t_list *head);
+t_list	*create_struct(char **argv);
+int		key_hook_one(int keycode, t_list *all);
+int		key_hook_two(int keycode, t_list *all);
+void	drawxlines(t_list *all);
+void	drawzlines(t_list *all);
+
+
 #endif
 //			MAN MLX
 // mlx_new_window		manage window

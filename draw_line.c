@@ -6,159 +6,98 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 16:31:51 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/16 21:32:11 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/02/22 13:32:28 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <stdio.h>
 
-static void	draw_nlv_z(t_list *st)
+static void	draw_negative_y(t_list *all)
 {
 	int	i;
 
 	i = 0;
-	while (st->rel == (float)1 && (st->sx <= st->ex && st->sy >= st->ey))
-		((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx++] = st->color;
-	while (st->sx <= st->ex && st->sy >= st->ey)
+	while (all->sx <= all->ex && all->sy >= all->ey)
 	{
-		if (st->sx == st->ex && st->sy >= st->ey)
-			((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx] = st->color;
-		else if (st->sy == st->ey && st->sx <= st->ex)
-			((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
-		else if (st->sx <= st->ex && st->sy >= st->ey)
+		while ((i <= all->rel) && (all->sx <= all->ex))
 		{
-			while (((float)i <= st->rel) && (st->sy >= st->ey))
-			{
-				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
-				((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx] = st->color;
-				i++;
-			}
-			if (st->sx <= st->ex)
-			{
-				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
-				((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
-			}
-			st->rel += st->orig_rel;
+			((int *)all->buffer)[(all->sy * WIN_W) + all->sx++] = all->color;
+			i++;
 		}
+		if (all->sy-- >= all->ey && all->orig_rel < 1)
+			((int *)all->buffer)[(all->sy * WIN_W) + all->sx] = all->color;
+		all->rel += all->orig_rel;
 	}
-	printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
 }
 
-static void	draw_higher_z(t_list *st)
+static void	draw_positive_y(t_list *all)
 {
 	int	i;
 
 	i = 0;
-	while (st->rel == (float)1 && (st->sx <= st->ex && st->sy <= st->ey))
-		((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx++] = st->color;
-	while (st->sx <= st->ex && st->sy <= st->ey)
+	while (all->sx == all->ex && all->sy++ <= all->ey)
+		((int *)all->buffer)[(all->sy * WIN_W) + all->sx] = all->color;
+	while (all->sy == all->ey && all->sx <= all->ex)
+		((int *)all->buffer)[(all->sy * WIN_W) + all->sx++] = all->color;
+	while (all->sx <= all->ex && all->sy <= all->ey)
 	{
-		if (st->sx == st->ex && st->sy <= st->ey)
-			((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx] = st->color;
-		else if (st->sy == st->ey && st->sx <= st->ex)
-			((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
-		else if (st->sx <= st->ex && st->sy <= st->ey)
+		while ((i <= all->rel) && (all->sx <= all->ex))
 		{
-			while (((float)i <= st->rel) && (st->sy <= st->ey))
-			{
-				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
-				((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx] = st->color;
-				i++;
-			}
-			if (st->sx <= st->ex)
-			{
-				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
-				((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
-			}
-			st->rel += st->orig_rel;
+			((int *)all->buffer)[(all->sy * WIN_W) + all->sx++] = all->color;
+			i++;
 		}
+		if (all->sy++ <= all->ey && all->orig_rel < 1)
+			((int *)all->buffer)[(all->sy * WIN_W) + all->sx] = all->color;
+		all->rel += all->orig_rel;
 	}
-	printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
 }
 
-static void	draw_nlv_x(t_list *st)
+int	flip_coordinates(t_list *all)
 {
-	int	i;
+	t_list	*temp;
 
-	i = 0;
-	while (st->rel == (float)1 && (st->sx <= st->ex && st->sy >= st->ey))
-			((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx++] = st->color;
-	while (st->sx <= st->ex && st->sy >= st->ey)
-	{
-		if (st->sx == st->ex && st->sy >= st->ey)
-			((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx] = st->color;
-		else if (st->sy == st->ey && st->sx <= st->ex)
-			((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
-		else if (st->sx <= st->ex && st->sy >= st->ey)
-		{
-			while (((float)i <= st->rel) && (st->sx <= st->ex))
-			{
-				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
-				((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
-				i++;
-			}
-			if (st->sy >= st->ey)
-			{
-				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
-				((int *)st->buffer)[(st->sy-- * WIN_WIDTH) + st->sx] = st->color;
-			}
-		}
-			st->rel += st->orig_rel;
-	}
-	printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
+	temp = (t_list *)malloc(sizeof(t_list));
+	if (temp == NULL)
+		return (-1);
+	temp->mlx = all->mlx;
+	temp->win = all->win;
+	temp->color = all->color;
+	temp->rel = all->rel;
+	temp->orig_rel = all->orig_rel;
+	temp->ex = all->sx;
+	temp->sx = all->ex;
+	temp->sy = all->ey;
+	temp->ey = all->sy;
+	temp->image = all->image;
+	temp->buffer = all->buffer;
+	draw_line(temp);
+	free(temp);
+	return (0);
 }
 
-static void	draw_higher_x(t_list *st)
+int	draw_line(t_list *all)
 {
-	int	i;
-	
-	i = 0;
-	while (st->rel == (float)1 && (st->sx <= st->ex && st->sy <= st->ey))
-			((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx++] = st->color;
-	while (st->sx <= st->ex && st->sy <= st->ey)
+	float	x_len;
+	float	y_len;
+
+	x_len = (all->ex - all->sx);
+	y_len = (all->ey - all->sy);
+	if (x_len >= 0 && y_len >= 0)
 	{
-		if (st->sx == st->ex && st->sy <= st->ey)
-			((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx] = st->color;
-		else if (st->sy == st->ey && st->sx <= st->ex)
-			((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
-		else if (st->sx <= st->ex && st->sy <= st->ey)
-		{
-			while (((float)i <= st->rel) && (st->sx <= st->ex))
-			{
-				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
-				((int *)st->buffer)[(st->sy * WIN_WIDTH) + st->sx++] = st->color;
-				i++;
-			}
-			if (st->sy <= st->ey)
-			{
-				printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
-				((int *)st->buffer)[(st->sy++ * WIN_WIDTH) + st->sx] = st->color;
-			}
-			st->rel += st->orig_rel;
-		}
+		all->rel = (x_len / y_len);
+		all->orig_rel = (x_len / y_len);
+		draw_positive_y(all);
 	}
-	printf("float %f and i %i, x = %i and y = %i\n", st->rel, i, st->sx, st->sy);
-}
-
-int	draw_line(t_list *head)
-{
-	int		x_len;
-	int		y_len;
-
-	x_len = (head->ex - head->sx);
-	y_len = (head->ey - head->sy);
-	if (x_len >= y_len && x_len >= 0 && y_len >= 0)
-		draw_higher_x(first_relation(x_len, y_len, head));
-	else if (y_len >= x_len && x_len >= 0 && y_len >= 0)
-		draw_higher_z(second_relation(x_len, y_len, head));
-	else if (x_len <= (y_len * -1) && x_len >= 0 && y_len <= 0)
-		draw_nlv_x(third_relation(x_len, y_len, head));
-	else if ((y_len * -1) <= x_len && x_len >= 0 && y_len <= 0)
-		draw_nlv_z(fourth_relation(x_len, y_len, head));
+	else if (x_len > 0 && y_len <= 0)
+	{
+		all->rel = ((x_len / y_len) * -1);
+		all->orig_rel = ((x_len / y_len) * -1);
+		draw_negative_y(all);
+	}
 	else
 	{
-		if (draw_line_extention(head) == -1)
+		if (flip_coordinates(all) == -1)
 			return (-1);
 	}
 	return (0);
