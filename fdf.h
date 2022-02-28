@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:33:31 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/22 20:13:07 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/02/28 15:21:11 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 # define BUFF_SIZE 8
 # define FD_MAX 8192
 
-# define WIN_W 1000
-# define WIN_H 1000
+# define W_W 1000
+# define W_H 1000
 
 typedef struct s_list
 {
@@ -54,8 +54,7 @@ typedef struct s_list
 	int		hoffset;
 	
 
-	int		h_rotation;
-	float	v_rotation;
+	float		h_rotation;
 
 	char	**argv_copy;
 	

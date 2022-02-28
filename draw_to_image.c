@@ -6,43 +6,33 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:50:04 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/23 21:12:57 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/02/28 16:09:01 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static int	is_line_vaid(t_list *all)
-{
-	if (all->sx >= 0 && all->sx < WIN_W - 1)
-	{
-		if (all->ex > 0 && all->ex < WIN_W - 1)
-		{
-			if (all->sy > 0 && all->sy < WIN_H - 1)
-			{
-				if (all->ey > 0 && all->ey < WIN_H - 1)
-					return (1);
-			}
-		}
-	}
-	return (0);
-}
 
 static int	gety(t_list	*all, int x, int z)
 {
 	int	value;
-
-	value = (all->woffset + ((z  * all->zoom)));
-	value += (x * all->h_rotation);
-	value -= (all->coordinates[z][x]);
+	float	temp;
+	
+	value = (all->woffset + (((z - (all->maphight / 2)) * all->zoom)));
+	temp = (all->h_rotation * (all->zoom));
+	value += ((x - (all->maplen / 2)) * temp);
+	value -= (all->coordinates[z][x] * all->zoom);
 	return (value);
 }
 
 static int	getx(t_list	*all, int x, int z)
 {
 	int	value;
-
-	value = ((all->hoffset - (z * (all->h_rotation * 2)) + (x * all->zoom)));
+	float	temp;
+	
+	value = (all->hoffset + ((x - (all->maplen / 2)) * all->zoom));
+	temp = (all->h_rotation * (all->zoom));
+	value -= ((z - (all->maphight / 2)) * temp);
 	return (value);
 }
 
@@ -61,13 +51,9 @@ void	drawxlines(t_list *all)
 		{
 			all->ex = getx(all, x, z);
 			all->ey = gety(all, x, z);
-			if (is_line_vaid(all) == 1)
-				draw_line(all);
-			else
-			{
-				all->sx = getx(all, x, z);
-				all->sy = gety(all, x, z);
-			}
+			draw_line(all);
+			all->sx = getx(all, x, z);
+			all->sy = gety(all, x, z);
 		}
 		z++;
 	}
@@ -88,13 +74,9 @@ void	drawzlines(t_list *all)
 		{
 			all->ex = getx(all, x, z);
 			all->ey = gety(all, x, z);
-			if (is_line_vaid(all) == 1)
-				draw_line(all);
-			else
-			{
-				all->sx = getx(all, x, z);
-				all->sy = gety(all, x, z);
-			}
+			draw_line(all);
+			all->sx = getx(all, x, z);
+			all->sy = gety(all, x, z);
 		}
 		x++;
 	}

@@ -6,49 +6,53 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 16:31:51 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/22 13:32:28 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/02/28 15:57:48 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include <stdio.h>
 
-static void	draw_negative_y(t_list *all)
+static void	draw_negative_y(t_list *all, int i)
 {
-	int	i;
-
-	i = 0;
 	while (all->sx <= all->ex && all->sy >= all->ey)
 	{
-		while ((i <= all->rel) && (all->sx <= all->ex))
+		while ((i <= all->rel) && (all->sx++ <= all->ex))
 		{
-			((int *)all->buffer)[(all->sy * WIN_W) + all->sx++] = all->color;
+			if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 			i++;
 		}
 		if (all->sy-- >= all->ey && all->orig_rel < 1)
-			((int *)all->buffer)[(all->sy * WIN_W) + all->sx] = all->color;
+			if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 		all->rel += all->orig_rel;
 	}
 }
 
-static void	draw_positive_y(t_list *all)
+static void	draw_positive_y(t_list *all, int i)
 {
-	int	i;
-
-	i = 0;
 	while (all->sx == all->ex && all->sy++ <= all->ey)
-		((int *)all->buffer)[(all->sy * WIN_W) + all->sx] = all->color;
+	{
+		if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+			((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
+	}
 	while (all->sy == all->ey && all->sx <= all->ex)
-		((int *)all->buffer)[(all->sy * WIN_W) + all->sx++] = all->color;
+	{
+		if (all->sx++ >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+			((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
+	}
 	while (all->sx <= all->ex && all->sy <= all->ey)
 	{
-		while ((i <= all->rel) && (all->sx <= all->ex))
+		while ((i <= all->rel) && (all->sx++ <= all->ex))
 		{
-			((int *)all->buffer)[(all->sy * WIN_W) + all->sx++] = all->color;
+			if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 			i++;
 		}
 		if (all->sy++ <= all->ey && all->orig_rel < 1)
-			((int *)all->buffer)[(all->sy * WIN_W) + all->sx] = all->color;
+			if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 		all->rel += all->orig_rel;
 	}
 }
@@ -80,20 +84,22 @@ int	draw_line(t_list *all)
 {
 	float	x_len;
 	float	y_len;
+	int		i;
 
+	i = 0;
 	x_len = (all->ex - all->sx);
 	y_len = (all->ey - all->sy);
 	if (x_len >= 0 && y_len >= 0)
 	{
 		all->rel = (x_len / y_len);
 		all->orig_rel = (x_len / y_len);
-		draw_positive_y(all);
+		draw_positive_y(all, i);
 	}
 	else if (x_len > 0 && y_len <= 0)
 	{
 		all->rel = ((x_len / y_len) * -1);
 		all->orig_rel = ((x_len / y_len) * -1);
-		draw_negative_y(all);
+		draw_negative_y(all, i);
 	}
 	else
 	{
