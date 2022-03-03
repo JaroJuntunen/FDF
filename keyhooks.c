@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:45:16 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/03 17:47:11 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/03 18:13:08 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,26 @@ int	make_usage_str(t_list *all)
 {
 	int	fd;
 	int	i;
+	int	ret;
 
+	ret = 1;
 	i = 0;
 	fd = open("usage", O_RDONLY);
-	while (get_next_line(fd, &all->str))
+	while (ret == 1)
 	{
-		mlx_string_put(all->mlx, all->win, 0, (i * 15), 0xf000f0, all->str);
-		ft_strdel(&all->str);
+		ret = get_next_line(fd, &all->str);
+		if (ret != 0)
+		{
+			mlx_string_put(all->mlx, all->win, 0, (i * 15), 0xf000f0, all->str);
+			ft_strdel(&all->str);
+		}
 		i++;
 	}
 	close(fd);
 	return (1);
 }
 
-void	change_color(t_list *all)
+ static void	change_color(t_list *all)
 {
 	if (all->color == 0xffffff)
 		all->color = 0xff0000;
@@ -96,7 +102,7 @@ int	key_hook_one(int keycode, t_list *all)
 		all->h_rotation += 0.05;
 	else if (keycode == 123 && all->h_rotation > -1.5)
 		all->h_rotation -= 0.05;
-	else if (keycode == 125 && all->zoom > 5)
+	else if (keycode == 125 && all->zoom > 3)
 		all->zoom -= 1;
 	else if (keycode == 126)
 		all->zoom += 1;
