@@ -6,18 +6,17 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:50:04 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/28 16:09:01 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/02/28 17:46:39 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-
 static int	gety(t_list	*all, int x, int z)
 {
-	int	value;
+	int		value;
 	float	temp;
-	
+
 	value = (all->woffset + (((z - (all->maphight / 2)) * all->zoom)));
 	temp = (all->h_rotation * (all->zoom));
 	value += ((x - (all->maplen / 2)) * temp);
@@ -27,16 +26,16 @@ static int	gety(t_list	*all, int x, int z)
 
 static int	getx(t_list	*all, int x, int z)
 {
-	int	value;
+	int		value;
 	float	temp;
-	
+
 	value = (all->hoffset + ((x - (all->maplen / 2)) * all->zoom));
 	temp = (all->h_rotation * (all->zoom));
 	value -= ((z - (all->maphight / 2)) * temp);
 	return (value);
 }
 
-void	drawxlines(t_list *all)
+int	drawxlines(t_list *all)
 {
 	int	x;
 	int	z;
@@ -51,15 +50,17 @@ void	drawxlines(t_list *all)
 		{
 			all->ex = getx(all, x, z);
 			all->ey = gety(all, x, z);
-			draw_line(all);
+			if (draw_line(all) == -1)
+				return (-1);
 			all->sx = getx(all, x, z);
 			all->sy = gety(all, x, z);
 		}
 		z++;
 	}
+	return (0);
 }
 
-void	drawzlines(t_list *all)
+int	drawzlines(t_list *all)
 {
 	int	x;
 	int	z;
@@ -74,10 +75,12 @@ void	drawzlines(t_list *all)
 		{
 			all->ex = getx(all, x, z);
 			all->ey = gety(all, x, z);
-			draw_line(all);
+			if (draw_line(all) == -1)
+				return (-1);
 			all->sx = getx(all, x, z);
 			all->sy = gety(all, x, z);
 		}
 		x++;
 	}
+	return (0);
 }

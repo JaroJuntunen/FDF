@@ -6,12 +6,11 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 16:31:51 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/28 15:57:48 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/02/28 17:43:53 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <stdio.h>
 
 static void	draw_negative_y(t_list *all, int i)
 {

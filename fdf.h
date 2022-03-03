@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:33:31 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/28 15:21:11 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/02 20:17:49 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include "libft/libft.h"
 # define BUFF_SIZE 8
 # define FD_MAX 8192
-
 # define W_W 1000
 # define W_H 1000
 
@@ -34,7 +33,6 @@ typedef struct s_list
 	int		sy;
 	int		osy;
 	int		ey;
-	
 	int		color;
 	int		color_on_off;
 	int		*image;
@@ -43,47 +41,24 @@ typedef struct s_list
 	int		endian;
 	int		pixel;
 	char	*buffer;
-
 	int		**coordinates;
-	
 	int		highest_y;
 	int		maplen;
 	int		maphight;
 	int		zoom;
 	int		woffset;
 	int		hoffset;
-	
-
-	float		h_rotation;
-
+	float	h_rotation;
 	char	**argv_copy;
-	
+	char	*str;
 }			t_list;
 
-# define ANGLE 6
-
-
-
-
-
-
-
-int		readcoordinates(char **argv, t_list *all);
+int		read_coordinates(char **argv, t_list *all);
 int		get_next_line(const int fd, char **line);
 int		draw_line(t_list *head);
 t_list	*create_struct(char **argv);
 int		key_hook_one(int keycode, t_list *all);
-int		key_hook_two(int keycode, t_list *all);
-void	drawxlines(t_list *all);
-void	drawzlines(t_list *all);
-
-
+int		drawxlines(t_list *all);
+int		drawzlines(t_list *all);
+int		make_usage_str(t_list *all);
 #endif
-//			MAN MLX
-// mlx_new_window		manage window
-// mlx_pixel_put		draw inside window
-// mlx_new_image		manipulate images
-// mlx_loop				handle kayboard or mouse events
-
-//bresenham line
-//dda
