@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 16:31:51 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/28 17:43:53 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/03 19:02:41 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ static void	draw_negative_y(t_list *all, int i)
 	{
 		while ((i <= all->rel) && (all->sx++ <= all->ex))
 		{
-			if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+			if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
 				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 			i++;
 		}
 		if (all->sy-- >= all->ey && all->orig_rel < 1)
-			if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+			if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
 				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 		all->rel += all->orig_rel;
 	}
@@ -33,24 +33,24 @@ static void	draw_positive_y(t_list *all, int i)
 {
 	while (all->sx == all->ex && all->sy++ <= all->ey)
 	{
-		if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+		if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
 			((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 	}
 	while (all->sy == all->ey && all->sx <= all->ex)
 	{
-		if (all->sx++ >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+		if (all->sx++ > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
 			((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 	}
 	while (all->sx <= all->ex && all->sy <= all->ey)
 	{
 		while ((i <= all->rel) && (all->sx++ <= all->ex))
 		{
-			if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+			if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
 				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 			i++;
 		}
 		if (all->sy++ <= all->ey && all->orig_rel < 1)
-			if (all->sx >= 0 && all->sx <= W_W && all->sy >= 0 && all->sy < W_H)
+			if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
 				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
 		all->rel += all->orig_rel;
 	}

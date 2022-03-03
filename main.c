@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:59:47 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/03 18:04:12 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/03 18:58:24 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	main(int argc, char **argv)
 	if (drawxlines(all) == -1 || drawzlines(all) == -1)
 		error_handler(1, all);
 	mlx_put_image_to_window(all->mlx, all->win, all->image, 0, 0);
-	make_usage_str(all);
+	if (make_usage_str(all) == -1)
+		return (-1);
 	mlx_destroy_image(all->mlx, all->image);
 	if (mlx_key_hook(all->win, key_hook_one, all) == -1)
 		error_handler(2, all);

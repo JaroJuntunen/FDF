@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:45:16 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/03 18:18:44 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/03 18:47:10 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int	make_usage_str(t_list *all)
 
 	ret = 1;
 	i = 0;
-	fd = open("usage", O_RDONLY);
+	fd = open("usage.txt", O_RDONLY);
 	while (ret == 1)
 	{
 		ret = get_next_line(fd, &all->str);
-		if (ret != 0)
+		if (ret == 1)
 		{
 			mlx_string_put(all->mlx, all->win, 0, (i * 15), 0xf000f0, all->str);
 			ft_strdel(&all->str);
@@ -32,6 +32,8 @@ int	make_usage_str(t_list *all)
 		i++;
 	}
 	close(fd);
+	if (ret == -1)
+		return (-1);
 	return (1);
 }
 
@@ -69,7 +71,8 @@ static int	new_image(t_list *all)
 		return (-1);
 	}
 	mlx_put_image_to_window(all->mlx, all->win, all->image, 0, 0);
-	make_usage_str(all);
+	if (make_usage_str(all) == -1)
+		return (-1);
 	mlx_destroy_image(all->mlx, all->image);
 	return (0);
 }
