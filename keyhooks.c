@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:45:16 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/03 18:13:08 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/03 18:18:44 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	make_usage_str(t_list *all)
 	return (1);
 }
 
- static void	change_color(t_list *all)
+static void	change_color(t_list *all)
 {
 	if (all->color == 0xffffff)
 		all->color = 0xff0000;
