@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:58:47 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/03 17:42:40 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/04 15:06:27 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ int	*create_arrey(char *line, t_list *all)
 	if (arrey == NULL)
 		return (NULL);
 	tmp = fillarrey(arrey, line);
+	if (tmp == NULL)
+	{
+		ft_putstr_fd("Vaues to high, max/min 1000/-1000.\n", 2);
+		return (NULL);
+	}
 	return (tmp);
 }
 
@@ -76,10 +81,14 @@ int	check_line(char *line)
 	while (line[i] != '\0')
 	{
 		if (line[i] == ' ' || line[i] == '	'
+			|| line[i] == '-'
 			|| (line[i] <= '9' && line[i] >= '0'))
 			i++;
 		else
+		{
+			ft_putstr_fd("File not valid.\n", 2);
 			return (-1);
+		}
 	}
 	return (0);
 }
