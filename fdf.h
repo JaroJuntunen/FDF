@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:33:31 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/03 17:53:56 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/07 12:56:54 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,10 @@ typedef struct s_list
 	void	*mlx;
 	void	*win;
 	int		sx;
-	int		osx;
 	int		ex;
 	int		sy;
-	int		osy;
 	int		ey;
 	int		color;
-	int		color_on_off;
 	int		*image;
 	int		pixel_bits;
 	int		line_bytes;
@@ -42,14 +39,12 @@ typedef struct s_list
 	int		pixel;
 	char	*buffer;
 	int		**coordinates;
-	int		highest_y;
 	int		maplen;
 	int		maphight;
 	int		zoom;
 	int		woffset;
 	int		hoffset;
 	float	h_rotation;
-	char	**argv_copy;
 	char	*str;
 }			t_list;
 

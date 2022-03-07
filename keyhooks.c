@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:45:16 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/03 18:47:10 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/07 13:06:23 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	make_usage_str(t_list *all)
 	ret = 1;
 	i = 0;
 	fd = open("usage.txt", O_RDONLY);
-	while (ret == 1)
+	while (ret == 1 && fd > -1)
 	{
 		ret = get_next_line(fd, &all->str);
 		if (ret == 1)
@@ -31,7 +31,8 @@ int	make_usage_str(t_list *all)
 		}
 		i++;
 	}
-	close(fd);
+	if (fd > -1)
+		close(fd);
 	if (ret == -1)
 		return (-1);
 	return (1);
@@ -79,9 +80,7 @@ static int	new_image(t_list *all)
 
 static int	key_hook_two(int keycode, t_list *all)
 {
-	if (keycode == 8)
-		all->color_on_off *= -2;
-	else if (keycode == 53)
+	if (keycode == 53)
 	{
 		free(all);
 		exit(0);

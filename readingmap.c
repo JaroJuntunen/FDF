@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:58:47 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/04 15:06:27 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/07 13:04:53 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,19 @@
 int	*fillarrey(int *arrey, char *line)
 {
 	int		i;
-	int		j;
 	int		x;
-	char	temp[5];
 
 	i = 0;
 	x = 0;
 	while (line[i] != '\0')
 	{
-		j = 0;
+		arrey[x] = ft_atoi(line + i);
 		while (line[i] != '\0' && (line[i] == ' ' || line[i] == '	'))
 			i++;
 		if (line[i] == '-')
-		temp[j++] = line[i++];
+			i++;
 		while (line[i] != '\0' && line[i] >= '0' && line[i] <= '9')
-			temp[j++] = line[i++];
-		temp[j] = '\0';
-		arrey[x] = ft_atoi(temp);
+			i++;
 		if (arrey[x] > 1000 || arrey[x] < -1000)
 			return (NULL);
 		x++;
@@ -57,12 +53,15 @@ int	*create_arrey(char *line, t_list *all)
 	return (tmp);
 }
 
-int	file_line_hight(char **argv, char *line)
+int	file_line_hight(char **argv, t_list *all)
 {
-	int	line_count;
-	int	fd;
+	int		line_count;
+	int		fd;
+	char	*line;
 
 	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		return (-1);
 	line_count = 0;
 	while (get_next_line(fd, &line) > 0)
 	{
@@ -70,6 +69,7 @@ int	file_line_hight(char **argv, char *line)
 		line_count++;
 	}
 	close(fd);
+	all->maphight = line_count;
 	return (line_count);
 }
 
@@ -100,10 +100,11 @@ int	read_coordinates(char **argv, t_list *all)
 	char	*line;
 
 	z = 0;
-	all->maphight = file_line_hight(argv, line);
+	if (file_line_hight(argv, all) == -1)
+		return (-1);
 	all->coordinates = (int **)malloc((sizeof(int *) * all->maphight));
 	fd = open(argv[1], O_RDONLY);
-	if (fd < 0 || read(fd, all->str, 0) < 0)
+	if (fd < 0 || read(fd, all->str, 0) < 0 || all->coordinates == NULL)
 		return (-1);
 	while (z < all->maphight)
 	{
@@ -112,11 +113,10 @@ int	read_coordinates(char **argv, t_list *all)
 			if (check_line(line) == -1)
 				return (-1);
 			all->coordinates[z] = create_arrey(line, all);
-			if (all->coordinates[z] == NULL)
+			if (all->coordinates[z++] == NULL)
 				return (-1);
 		}
 		ft_strdel(&line);
-		z++;
 	}
 	close(fd);
 	return (0);

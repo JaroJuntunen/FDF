@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:27:40 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/03 18:58:32 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/07 12:20:10 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ t_list	*create_struct(char **argv)
 	all->woffset = (W_W / 2);
 	all->hoffset = W_H / 2;
 	all->h_rotation = -1;
-	all->str = ft_strnew(630);
 	if (read_coordinates(argv, all) < 0)
 	{
 		ft_putstr_fd("Error while reading\n", 2);

@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:59:47 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/04 15:03:42 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/07 12:15:07 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,16 @@ static void	error_handler(int error, t_list *all)
 		ft_putstr_fd("ERROR while creating new image\n", 2);
 	else if (error == 3)
 		ft_putstr_fd("give one mapfile whit ( ./fdf )\n", 2);
-	if (all != NULL)
+	if (all)
 		free(all);
-	exit(-1);
+	exit(1);
 }
 
 int	main(int argc, char **argv)
 {
 	t_list	*all;
 
+	all = NULL;
 	if (argc > 2)
 		error_handler(0, all);
 	if (argc < 2)
@@ -39,13 +40,13 @@ int	main(int argc, char **argv)
 	if (all == NULL)
 	{
 		free(all);
-		return (-1);
+		return (1);
 	}
 	if (drawxlines(all) == -1 || drawzlines(all) == -1)
 		error_handler(1, all);
 	mlx_put_image_to_window(all->mlx, all->win, all->image, 0, 0);
 	if (make_usage_str(all) == -1)
-		return (-1);
+		return (1);
 	mlx_destroy_image(all->mlx, all->image);
 	if (mlx_key_hook(all->win, key_hook_one, all) == -1)
 		error_handler(2, all);
