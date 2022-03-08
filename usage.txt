@@ -14,4 +14,7 @@
 *     change  color      *
 *          space         *
 *                        *
+*  Different projection  *
+*            P           *
+*                        *
 **************************
