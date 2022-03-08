@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:45:16 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/07 13:06:23 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/08 20:24:09 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,10 @@ int	key_hook_one(int keycode, t_list *all)
 		all->zoom += 1;
 	else if (keycode == 49)
 		change_color(all);
+	else if (keycode == 35 && all->projection < 1)
+		all->projection += 1;
+	else if (keycode == 35 && all->projection == 1)
+		all->projection = 0;
 	if (key_hook_two(keycode, all) == -1)
 		return (-1);
 	return (0);

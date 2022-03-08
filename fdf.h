@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:33:31 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/07 12:56:54 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/08 19:34:50 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_list
 	int		hoffset;
 	float	h_rotation;
 	char	*str;
+	int		projection;
 }			t_list;
 
 int		read_coordinates(char **argv, t_list *all);

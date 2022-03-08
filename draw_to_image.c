@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:50:04 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/02/28 17:46:39 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/08 20:23:54 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,11 @@ static int	gety(t_list	*all, int x, int z)
 
 	value = (all->woffset + (((z - (all->maphight / 2)) * all->zoom)));
 	temp = (all->h_rotation * (all->zoom));
-	value += ((x - (all->maplen / 2)) * temp);
-	value -= (all->coordinates[z][x] * all->zoom);
+	if (all->projection == 0 || all->projection == 1)
+	{
+		value += ((x - (all->maplen / 2)) * temp);
+		value -= (all->coordinates[z][x] * all->zoom);
+	}
 	return (value);
 }
 
@@ -31,7 +34,10 @@ static int	getx(t_list	*all, int x, int z)
 
 	value = (all->hoffset + ((x - (all->maplen / 2)) * all->zoom));
 	temp = (all->h_rotation * (all->zoom));
-	value -= ((z - (all->maphight / 2)) * temp);
+	if (all->projection == 0)
+		value -= ((z - (all->maphight / 2)) * temp);
+	else if (all->projection == 1)
+		value += z * temp;
 	return (value);
 }
 
