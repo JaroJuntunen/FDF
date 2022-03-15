@@ -6,7 +6,7 @@
 #    By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/01/24 15:30:07 by jjuntune          #+#    #+#              #
-#    Updated: 2022/03/07 13:05:26 by jjuntune         ###   ########.fr        #
+#    Updated: 2022/03/09 13:17:15 by jjuntune         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ $(NAME): $(OFILES) $(LIBRERY)
 	$(COMP) $(OFILES) $(LIBRERY) $(INCLUDES) -o $(NAME)
 
 %.o:%.c
-	gcc $(FLAGS) -c $(FILES) $<
+	$(COMP) $(FLAGS) -c $(FILES) $<
 
 $(LIBRERY):
 	make -C libft/

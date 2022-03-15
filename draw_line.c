@@ -6,13 +6,13 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 16:31:51 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/03 19:02:41 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/09 13:14:22 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	draw_negative_y(t_list *all, int i)
+static void	draw_negative_y(t_struct *all, int i)
 {
 	while (all->sx <= all->ex && all->sy >= all->ey)
 	{
@@ -29,7 +29,7 @@ static void	draw_negative_y(t_list *all, int i)
 	}
 }
 
-static void	draw_positive_y(t_list *all, int i)
+static void	draw_positive_y(t_struct *all, int i)
 {
 	while (all->sx == all->ex && all->sy++ <= all->ey)
 	{
@@ -56,11 +56,11 @@ static void	draw_positive_y(t_list *all, int i)
 	}
 }
 
-int	flip_coordinates(t_list *all)
+int	flip_coordinates(t_struct *all)
 {
-	t_list	*temp;
+	t_struct	*temp;
 
-	temp = (t_list *)malloc(sizeof(t_list));
+	temp = (t_struct *)malloc(sizeof(t_struct));
 	if (temp == NULL)
 		return (-1);
 	temp->mlx = all->mlx;
@@ -79,7 +79,7 @@ int	flip_coordinates(t_list *all)
 	return (0);
 }
 
-int	draw_line(t_list *all)
+int	draw_line(t_struct *all)
 {
 	float	x_len;
 	float	y_len;

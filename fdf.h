@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:33:31 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/08 19:34:50 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:22:54 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define W_W 1000
 # define W_H 1000
 
-typedef struct s_list
+typedef struct s_struct
 {
 	float	rel;
 	float	orig_rel;
@@ -39,22 +39,23 @@ typedef struct s_list
 	int		pixel;
 	char	*buffer;
 	int		**coordinates;
-	int		maplen;
-	int		maphight;
+	int		map_len;
+	int		map_hight;
 	int		zoom;
-	int		woffset;
-	int		hoffset;
+	int		w_offset;
+	int		h_offset;
 	float	h_rotation;
 	char	*str;
 	int		projection;
-}			t_list;
+}			t_struct;
 
-int		read_coordinates(char **argv, t_list *all);
-int		get_next_line(const int fd, char **line);
-int		draw_line(t_list *head);
-t_list	*create_struct(char **argv);
-int		key_hook_one(int keycode, t_list *all);
-int		drawxlines(t_list *all);
-int		drawzlines(t_list *all);
-int		make_usage_str(t_list *all);
+int			read_coordinates(char **argv, t_struct *all);
+int			get_next_line(const int fd, char **line);
+int			draw_line(t_struct *head);
+t_struct	*create_struct(char **argv);
+int			key_hook_one(int keycode, t_struct *all);
+int			draw_x_lines(t_struct *all);
+int			draw_z_lines(t_struct *all);
+int			make_usage_str(t_struct *all);
+void		error_handler(int error, t_struct *all);
 #endif

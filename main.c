@@ -6,13 +6,13 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:59:47 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/07 12:15:07 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:19:26 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	error_handler(int error, t_list *all)
+void	error_handler(int error, t_struct *all)
 {
 	if (error == 0)
 		ft_putstr_fd("ERROR. Please give only one file at the time\n", 2);
@@ -22,6 +22,10 @@ static void	error_handler(int error, t_list *all)
 		ft_putstr_fd("ERROR while creating new image\n", 2);
 	else if (error == 3)
 		ft_putstr_fd("give one mapfile whit ( ./fdf )\n", 2);
+	else if (error == 4)
+		ft_putstr_fd("File not valid.\n", 2);
+	else if (error == 5)
+		ft_putstr_fd("Values to high, max/min 1000/-1000.\n", 2);
 	if (all)
 		free(all);
 	exit(1);
@@ -29,7 +33,7 @@ static void	error_handler(int error, t_list *all)
 
 int	main(int argc, char **argv)
 {
-	t_list	*all;
+	t_struct	*all;
 
 	all = NULL;
 	if (argc > 2)
@@ -42,7 +46,7 @@ int	main(int argc, char **argv)
 		free(all);
 		return (1);
 	}
-	if (drawxlines(all) == -1 || drawzlines(all) == -1)
+	if (draw_x_lines(all) == -1 || draw_z_lines(all) == -1)
 		error_handler(1, all);
 	mlx_put_image_to_window(all->mlx, all->win, all->image, 0, 0);
 	if (make_usage_str(all) == -1)
