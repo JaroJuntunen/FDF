@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/31 15:58:47 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/15 14:28:35 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/15 14:40:59 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,7 @@ int	*create_arrey(char *line, t_struct *all)
 	all->map_len = ft_wordcount(line, ' ');
 	if (!line_len)
 		line_len = all->map_len;
-	if (line_len != all->map_len)
-		error_handler(4, all);
-	if (all->map_len == 0)
+	if (line_len != all->map_len || all->map_len == 0)
 		error_handler(4, all);
 	arrey = (int *)malloc((sizeof(int) * all->map_len));
 	if (arrey == NULL)
