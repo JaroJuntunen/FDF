@@ -6,76 +6,86 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 16:31:51 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/09 13:14:22 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/25 12:02:25 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+static int	is_it_inside_map(t_struct *all)
+{
+	if (all->s_x < 0)
+		return (0);
+	else if (all->s_x >= W_W)
+		return (0);
+	else if (all->s_y < 0)
+		return (0);
+	else if (all->s_y >= W_H)
+		return (0);
+	else
+		return (1);
+}
+
 static void	draw_negative_y(t_struct *all, int i)
 {
-	while (all->sx <= all->ex && all->sy >= all->ey)
+	while (all->s_x <= all->e_x && all->s_y >= all->e_y)
 	{
-		while ((i <= all->rel) && (all->sx++ <= all->ex))
+		while ((i <= all->rel) && (all->s_x++ <= all->e_x))
 		{
-			if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
-				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
+			if (is_it_inside_map(all) == 1)
+				((int *)all->buffer)[(all->s_y * W_W) + all->s_x] = all->color;
 			i++;
 		}
-		if (all->sy-- >= all->ey && all->orig_rel < 1)
-			if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
-				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
+		if (all->s_y-- >= all->e_y && all->orig_rel < 1)
+			if (is_it_inside_map(all) == 1)
+				((int *)all->buffer)[(all->s_y * W_W) + all->s_x] = all->color;
 		all->rel += all->orig_rel;
 	}
 }
 
 static void	draw_positive_y(t_struct *all, int i)
 {
-	while (all->sx == all->ex && all->sy++ <= all->ey)
+	while (all->s_x == all->e_x && all->s_y++ <= all->e_y)
 	{
-		if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
-			((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
+		if (is_it_inside_map(all) == 1)
+			((int *)all->buffer)[(all->s_y * W_W) + all->s_x] = all->color;
 	}
-	while (all->sy == all->ey && all->sx <= all->ex)
+	while (all->s_y == all->e_y && all->s_x++ <= all->e_x)
 	{
-		if (all->sx++ > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
-			((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
+		if (is_it_inside_map(all) == 1)
+			((int *)all->buffer)[(all->s_y * W_W) + all->s_x] = all->color;
 	}
-	while (all->sx <= all->ex && all->sy <= all->ey)
+	while (all->s_x <= all->e_x && all->s_y <= all->e_y)
 	{
-		while ((i <= all->rel) && (all->sx++ <= all->ex))
+		while ((i <= all->rel) && (all->s_x++ <= all->e_x))
 		{
-			if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
-				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
+			if (is_it_inside_map(all) == 1)
+				((int *)all->buffer)[(all->s_y * W_W) + all->s_x] = all->color;
 			i++;
 		}
-		if (all->sy++ <= all->ey && all->orig_rel < 1)
-			if (all->sx > 0 && all->sx < W_W && all->sy > 0 && all->sy < W_H)
-				((int *)all->buffer)[(all->sy * W_W) + all->sx] = all->color;
+		if (all->s_y++ <= all->e_y && all->orig_rel < 1)
+			if (is_it_inside_map(all) == 1)
+				((int *)all->buffer)[(all->s_y * W_W) + all->s_x] = all->color;
 		all->rel += all->orig_rel;
 	}
 }
 
 int	flip_coordinates(t_struct *all)
 {
-	t_struct	*temp;
+	t_struct	temp;
 
-	temp = (t_struct *)malloc(sizeof(t_struct));
-	if (temp == NULL)
-		return (-1);
-	temp->mlx = all->mlx;
-	temp->win = all->win;
-	temp->color = all->color;
-	temp->rel = all->rel;
-	temp->orig_rel = all->orig_rel;
-	temp->ex = all->sx;
-	temp->sx = all->ex;
-	temp->sy = all->ey;
-	temp->ey = all->sy;
-	temp->image = all->image;
-	temp->buffer = all->buffer;
-	draw_line(temp);
-	free(temp);
+	temp.mlx = all->mlx;
+	temp.win = all->win;
+	temp.color = all->color;
+	temp.rel = all->rel;
+	temp.orig_rel = all->orig_rel;
+	temp.e_x = all->s_x;
+	temp.s_x = all->e_x;
+	temp.s_y = all->e_y;
+	temp.e_y = all->s_y;
+	temp.image = all->image;
+	temp.buffer = all->buffer;
+	draw_line(&temp);
 	return (0);
 }
 
@@ -86,8 +96,8 @@ int	draw_line(t_struct *all)
 	int		i;
 
 	i = 0;
-	x_len = (all->ex - all->sx);
-	y_len = (all->ey - all->sy);
+	x_len = (all->e_x - all->s_x);
+	y_len = (all->e_y - all->s_y);
 	if (x_len >= 0 && y_len >= 0)
 	{
 		all->rel = (x_len / y_len);

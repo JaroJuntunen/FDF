@@ -6,18 +6,18 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:50:04 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/09 13:16:37 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/25 12:02:41 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static int	gety(t_struct	*all, int x, int z)
+static int	get_y(t_struct	*all, int x, int z)
 {
 	int		value;
 	float	temp;
 
-	value = (all->w_offset + (((z - (all->map_hight / 2)) * all->zoom)));
+	value = (all->w_offset + (((z - (all->map_height / 2)) * all->zoom)));
 	temp = (all->h_rotation * (all->zoom));
 	if (all->projection == 0 || all->projection == 1)
 	{
@@ -27,7 +27,7 @@ static int	gety(t_struct	*all, int x, int z)
 	return (value);
 }
 
-static int	getx(t_struct	*all, int x, int z)
+static int	get_x(t_struct	*all, int x, int z)
 {
 	int		value;
 	float	temp;
@@ -35,7 +35,7 @@ static int	getx(t_struct	*all, int x, int z)
 	value = (all->h_offset + ((x - (all->map_len / 2)) * all->zoom));
 	temp = (all->h_rotation * (all->zoom));
 	if (all->projection == 0)
-		value -= ((z - (all->map_hight / 2)) * temp);
+		value -= ((z - (all->map_height / 2)) * temp);
 	else if (all->projection == 1)
 		value += z * temp;
 	return (value);
@@ -47,19 +47,19 @@ int	draw_x_lines(t_struct *all)
 	int	z;
 
 	z = 0;
-	while (z < all->map_hight)
+	while (z < all->map_height)
 	{
 		x = 0;
-		all->sx = getx(all, x, z);
-		all->sy = gety(all, x, z);
+		all->s_x = get_x(all, x, z);
+		all->s_y = get_y(all, x, z);
 		while (++x < all->map_len)
 		{
-			all->ex = getx(all, x, z);
-			all->ey = gety(all, x, z);
+			all->e_x = get_x(all, x, z);
+			all->e_y = get_y(all, x, z);
 			if (draw_line(all) == -1)
 				return (-1);
-			all->sx = getx(all, x, z);
-			all->sy = gety(all, x, z);
+			all->s_x = get_x(all, x, z);
+			all->s_y = get_y(all, x, z);
 		}
 		z++;
 	}
@@ -75,16 +75,16 @@ int	draw_z_lines(t_struct *all)
 	while (x < all->map_len)
 	{
 		z = 0;
-		all->sx = getx(all, x, z);
-		all->sy = gety(all, x, z);
-		while (++z < all->map_hight)
+		all->s_x = get_x(all, x, z);
+		all->s_y = get_y(all, x, z);
+		while (++z < all->map_height)
 		{
-			all->ex = getx(all, x, z);
-			all->ey = gety(all, x, z);
+			all->e_x = get_x(all, x, z);
+			all->e_y = get_y(all, x, z);
 			if (draw_line(all) == -1)
 				return (-1);
-			all->sx = getx(all, x, z);
-			all->sy = gety(all, x, z);
+			all->s_x = get_x(all, x, z);
+			all->s_y = get_y(all, x, z);
 		}
 		x++;
 	}

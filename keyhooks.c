@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 13:45:16 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/09 13:16:37 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/25 12:03:32 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,43 +78,43 @@ static int	new_image(t_struct *all)
 	return (0);
 }
 
-static int	key_hook_two(int keycode, t_struct *all)
+static int	key_hook_two(int ke_ycode, t_struct *all)
 {
-	if (keycode == 53)
+	if (ke_ycode == 53)
 	{
 		free(all);
 		exit(0);
 	}
-	else if (keycode == 0)
+	else if (ke_ycode == 0)
 		all->h_offset -= 10;
-	else if (keycode == 2)
+	else if (ke_ycode == 2)
 		all->h_offset += 10;
-	else if (keycode == 1)
+	else if (ke_ycode == 1)
 		all->w_offset += 10;
-	else if (keycode == 13)
+	else if (ke_ycode == 13)
 		all->w_offset -= 10;
 	if (new_image(all) == -1)
 		return (-1);
 	return (0);
 }
 
-int	key_hook_one(int keycode, t_struct *all)
+int	key_hook_one(int ke_ycode, t_struct *all)
 {
-	if (keycode == 124 && all->h_rotation < 1.5)
+	if (ke_ycode == 124 && all->h_rotation < 1.5)
 		all->h_rotation += 0.05;
-	else if (keycode == 123 && all->h_rotation > -1.5)
+	else if (ke_ycode == 123 && all->h_rotation > -1.5)
 		all->h_rotation -= 0.05;
-	else if (keycode == 125 && all->zoom > 3)
+	else if (ke_ycode == 125 && all->zoom > 3)
 		all->zoom -= 1;
-	else if (keycode == 126)
+	else if (ke_ycode == 126)
 		all->zoom += 1;
-	else if (keycode == 49)
+	else if (ke_ycode == 49)
 		change_color(all);
-	else if (keycode == 35 && all->projection < 1)
+	else if (ke_ycode == 35 && all->projection < 1)
 		all->projection += 1;
-	else if (keycode == 35 && all->projection == 1)
+	else if (ke_ycode == 35 && all->projection == 1)
 		all->projection = 0;
-	if (key_hook_two(keycode, all) == -1)
+	if (key_hook_two(ke_ycode, all) == -1)
 		return (-1);
 	return (0);
 }

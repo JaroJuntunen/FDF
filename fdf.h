@@ -6,7 +6,7 @@
 /*   By: jjuntune <jjuntune@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/24 15:33:31 by jjuntune          #+#    #+#             */
-/*   Updated: 2022/03/15 14:22:54 by jjuntune         ###   ########.fr       */
+/*   Updated: 2022/03/25 12:03:05 by jjuntune         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ typedef struct s_struct
 	float	orig_rel;
 	void	*mlx;
 	void	*win;
-	int		sx;
-	int		ex;
-	int		sy;
-	int		ey;
+	int		s_x;
+	int		e_x;
+	int		s_y;
+	int		e_y;
 	int		color;
 	int		*image;
 	int		pixel_bits;
@@ -40,7 +40,7 @@ typedef struct s_struct
 	char	*buffer;
 	int		**coordinates;
 	int		map_len;
-	int		map_hight;
+	int		map_height;
 	int		zoom;
 	int		w_offset;
 	int		h_offset;
@@ -53,7 +53,7 @@ int			read_coordinates(char **argv, t_struct *all);
 int			get_next_line(const int fd, char **line);
 int			draw_line(t_struct *head);
 t_struct	*create_struct(char **argv);
-int			key_hook_one(int keycode, t_struct *all);
+int			key_hook_one(int ke_ycode, t_struct *all);
 int			draw_x_lines(t_struct *all);
 int			draw_z_lines(t_struct *all);
 int			make_usage_str(t_struct *all);
